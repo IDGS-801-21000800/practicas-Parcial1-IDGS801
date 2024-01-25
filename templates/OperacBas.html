@@ -1,0 +1,23 @@
+{% extends "layout2.html" %}
+
+
+{%block container %}
+    <h1>Operaciones básicas</h1>
+    <form action="/operacion" method="post">
+        <label for="n1">Primer número</label>
+        <input type="text" name="n1"><br>
+        <label for="n2">Segundo número</label>
+        <input type="text" name="n2"><br>
+
+        <input type="radio" name="operacion" value="suma" id="suma">
+        <label for="suma">Suma</label><br>
+        <input type="radio" name="operacion" value="rest" id="rest">
+        <label for="rest">Resta</label><br>
+        <input type="radio" name="operacion" value="mult" id="mult">
+        <label for="mult">Multiplicación</label><br>
+        <input type="radio" name="operacion" value="divi" id="divi">
+        <label for="divi">División</label><br>
+
+        <input type="submit">
+    </form>
+{%endblock%}
