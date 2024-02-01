@@ -1,10 +1,29 @@
+import math
 from flask import Flask, render_template, request
+import Puntos
 
 app=Flask(__name__)
 
 @app.route("/")
 def index():
     return render_template("OperacBas.html")
+
+@app.route("/distancia", methods=["GET", "POST"])
+def distancia():
+    posA=Puntos.Punto(request.form)
+    resultado=0
+    
+    if request.method=="POST":
+        posAa=posA.posAa.data
+        posAb=posA.posAb.data
+        posBa=posA.posBa.data
+        posBb=posA.posBb.data
+        
+        numero=((int(posBa)-int(posAa))**2)+((int(posBb)-int(posAb))**2)
+        resultado= math.sqrt(float(numero))
+        print("resultado {} --------- {}".format(resultado, numero))
+    
+    return render_template("Distancia.html", posa=posA, resultado=resultado)
 
 
 @app.route("/operacion", methods=["GET", "POST"])

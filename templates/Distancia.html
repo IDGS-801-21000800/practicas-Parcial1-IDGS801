@@ -1,0 +1,22 @@
+{% extends "layout2.html" %}
+
+
+{%block container %}
+
+{% import "_macros.html" as macros %}
+    <h1>Distancia</h1>
+
+    <form action="" method="post">
+        {{macros.tit(text="Primera Posicion")}}
+        {{macros.camposNuevos(posa.posAa, class="form-control")}}
+        {{macros.camposNuevos(posa.posAb, class="form-control")}}
+        
+        {{macros.tit(text="Segunda Posicion")}}
+        {{macros.camposNuevos(posa.posBa, class="form-control")}}
+        {{macros.camposNuevos(posa.posBb, class="form-control")}}
+        <input type="submit" value="Calcular">
+    </form>
+
+    <h1>{{resultado}}</h1>
+    
+{%endblock%}
