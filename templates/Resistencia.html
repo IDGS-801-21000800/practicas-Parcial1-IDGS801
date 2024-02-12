@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css">
+    <style>
+        * {
+            color: rgb(41, 41, 41);
+        }
+
+        li {
+            list-style-type: none;
+        }
+
+        table {
+            width: 60%;
+        }
+    </style>
+</head>
+
+<body>
+    {% import "_macros.html" as macros %}
+
+    <div class="container">
+        <div class="row">
+            <h2>Resistencia</h2>
+            <form action="" method="post">
+                {{macros.camposNuevos(resistencia.banda1, class="form-control")}}
+                {{macros.camposNuevos(resistencia.banda2, class="form-control")}}
+                {{macros.camposNuevos(resistencia.banda3, class="form-control")}}
+                {{macros.camposNuevos(resistencia.tolerancia, class="form-control")}}
+                <input type="submit" value="aceptar">
+            </form>
+        </div>
+
+        <div class="row">
+            <table border="1">
+                <tr>
+                    <td>color 1</td>
+                    <td>color 2</td>
+                    <td>color 3</td>
+                    <td>Tolerancia</td>
+                    <td>Valor</td>
+                    <td>máximo</td>
+                    <td>minimo</td>
+                </tr>
+                <tr>
+                    <td bgcolor="{{color}}">{{vcolor}}</td>
+                    <td bgcolor="{{colord}}">{{vcolord}}</td>
+                    <td bgcolor="{{colort}}">{{vcolort}}</td>
+                    <td bgcolor="{{tolerancia}}">{{vtolerancia}} {{text}}</td>
+                    <td>{{valor}}</td>
+                    <td>{{maximo}}</td>
+                    <td>{{minimo}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

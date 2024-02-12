@@ -1,12 +1,81 @@
 import math
 from flask import Flask, render_template, request
 import Puntos
+import Resistencia
 
 app=Flask(__name__)
 
 @app.route("/")
 def index():
     return render_template("OperacBas.html")
+
+@app.route("/resistencia", methods=["GET", "POST"])
+def resistencia():
+    resistencia = Resistencia.Resistencia(request.form)
+
+    if request.method=="POST":
+        color = dict(resistencia.banda1.choices).get(resistencia.banda1.data)
+        colord = dict(resistencia.banda2.choices).get(resistencia.banda2.data)
+        colort = dict(resistencia.banda3.choices).get(resistencia.banda3.data)
+        tolerancia = resistencia.tolerancia.data
+        valor = int(resistencia.banda1.data + resistencia.banda2.data) * int(resistencia.banda3.data)
+        
+        if tolerancia == "oro": 
+            maximo = valor + (valor * 0.05)
+            minimo = valor - (valor * 0.05)
+            text = "5%"
+        else :
+            maximo = valor + (valor * 0.1)
+            minimo = valor - (valor * 0.1)
+            text = "10%"
+
+    return render_template("resistencia.html", 
+                                    resistencia=resistencia, 
+                                    color=cambiarColor(color),
+                                    colord=cambiarColor(colord),
+                                    colort=cambiarColor(colort),
+                                    tolerancia=cambiarColor(tolerancia),
+                                    valor=valor, 
+                                    maximo=maximo,
+                                    minimo=minimo,
+                                    text=text,
+
+                                    vcolor=color,
+                                    vcolord=colord,
+                                    vcolort=colort,
+                                    vresistencia=resistencia, 
+                                    vtolerancia=tolerancia)
+
+def cambiarColor(color):
+    if color == "negro":
+        return "black"
+    if color == "cafe":
+        return "brown"
+    if color == "rojo":
+        return "red"
+    if color == "naranja":
+        return "orange"
+    if color == "amarillo":
+        return "yellow"
+    if color == "verde":
+        return "green"
+    
+    if color == "azul":
+        return "blue"
+    if color == "violeta":
+        return "violet"
+    if color == "gris":
+        return "gray"
+    if color == "blanco":
+        return "white"
+    
+    if color == "oro":
+        return "gold"
+    if color == "plata":
+        return "silver"
+    
+    if color== "":
+        return "black"
 
 @app.route("/distancia", methods=["GET", "POST"])
 def distancia():
