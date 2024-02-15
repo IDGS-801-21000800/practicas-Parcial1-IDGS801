@@ -1,13 +1,39 @@
 import math
 from flask import Flask, render_template, request
+from io import open
 import Puntos
 import Resistencia
+import Diccionario
 
 app=Flask(__name__)
 
 @app.route("/")
 def index():
     return render_template("OperacBas.html")
+
+
+@app.route("/diccionario", methods=["GET", "POST"])
+def diccionario():
+    cldiccionario = Diccionario.diccionario(request.form)
+    archivo = open("diccionario.txt", "+a")
+    res = ""
+
+    if request.method=="POST":
+        guardar = "\n {} | {}".format(cldiccionario.ingles.data, cldiccionario.espanol.data)
+        print(guardar)
+        archivo.write(guardar)
+        archivo.close()
+#        return render_template("diccionario.html", diccionario=cldiccionario)
+
+    if request.method=="GET":
+        leer = cldiccionario.lectura.data
+        buscar = cldiccionario.busqueda.data
+        palabras = archivo.readlines()
+        print(leer)
+        print(buscar)
+        archivo.close()
+
+    return render_template("diccionario.html", diccionario=cldiccionario, resultado=res)
 
 @app.route("/resistencia", methods=["GET", "POST"])
 def resistencia():
