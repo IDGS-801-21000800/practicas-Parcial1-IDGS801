@@ -5,11 +5,10 @@ from wtforms import StringField, RadioField
 
 from wtforms import validators 
 
-class diccionario(Form):
-    espanol=StringField("espanol", validators=[
+class buscar(Form):
+    lectura = RadioField("lectura", choices=["ingles", "espannol"], validators=[
         validators.DataRequired(message='El campo es requerido')
     ])
-    ingles=StringField("ingles", validators=[
+    busqueda = StringField("busqueda", validators=[
         validators.DataRequired(message='El campo es requerido')
     ])
-

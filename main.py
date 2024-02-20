@@ -4,6 +4,7 @@ from io import open
 import Puntos
 import Resistencia
 import Diccionario
+import Busqueda
 
 app=Flask(__name__)
 
@@ -11,29 +12,51 @@ app=Flask(__name__)
 def index():
     return render_template("OperacBas.html")
 
+@app.route("/buscar", methods=["GET", "POST"])
+def buscar():
+    cldiccionario = Busqueda.buscar(request.form)
+    clcons= Diccionario.diccionario(request.form)
+    archivo = open("diccionario.txt")
+    res = ""
+
+    if request.method=="POST" and cldiccionario.validate():
+        print(cldiccionario.validate())
+        leer = cldiccionario.lectura.data
+        buscar = cldiccionario.busqueda.data
+        for datos in archivo.readlines():
+            word = datos.split(" | ")
+            if leer == "ingles":
+                if buscar == word[0]:
+                    res = word[1]
+                    break;
+                else:
+                    res = "no encontrado"
+            else:
+                if buscar == word[1]:
+                    res = word[0]
+                    break;
+                else:
+                    res = "no encontrado"
+        archivo.close()
+        print("validado")
+    elif cldiccionario.validate() == False:
+        print("no validado")
+    return render_template("diccionario.html", diccionario=clcons, buscar=cldiccionario, resultado=res)
 
 @app.route("/diccionario", methods=["GET", "POST"])
 def diccionario():
     cldiccionario = Diccionario.diccionario(request.form)
+    clbuscar = Busqueda.buscar(request.form)
     archivo = open("diccionario.txt", "+a")
-    res = ""
+    res=""
 
-    if request.method=="POST":
-        guardar = "\n {} | {}".format(cldiccionario.ingles.data, cldiccionario.espanol.data)
+    if request.method=="POST" and cldiccionario.validate():
+        guardar = "{} | {} | \n".format(cldiccionario.ingles.data, cldiccionario.espanol.data)
         print(guardar)
         archivo.write(guardar)
         archivo.close()
-#        return render_template("diccionario.html", diccionario=cldiccionario)
-
-    if request.method=="GET":
-        leer = cldiccionario.lectura.data
-        buscar = cldiccionario.busqueda.data
-        palabras = archivo.readlines()
-        print(leer)
-        print(buscar)
-        archivo.close()
-
-    return render_template("diccionario.html", diccionario=cldiccionario, resultado=res)
+        res = "Registrado"
+    return render_template("diccionario.html", diccionario=cldiccionario, buscar=clbuscar, com=res)
 
 @app.route("/resistencia", methods=["GET", "POST"])
 def resistencia():
@@ -123,11 +146,11 @@ def distancia():
 
 @app.route("/operacion", methods=["GET", "POST"])
 def operaciones():
+    res = ""
     if request.method=="POST":
         operacion = request.form.get("operacion")
         num1 = request.form.get("n1")
         num2 = request.form.get("n2")
-        res = ""
 
         if operacion == "suma": 
             res="La suma {} + {} = {}".format(num1, num2, float(num1)+float(num2))
@@ -137,7 +160,6 @@ def operaciones():
             res="La multiplicación {} * {} = {}".format(num1, num2, float(num1)*float(num2))
         if operacion == "divi": 
             res="La división {} / {} = {}".format(num1, num2, float(num1)/float(num2))
-
         return render_template("Resultado.html",mensaje = res)
 
 if __name__=="__main__":
